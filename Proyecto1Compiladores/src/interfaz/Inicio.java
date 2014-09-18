@@ -1,5 +1,6 @@
 package interfaz;
 
+import afn.AFN;
 import infijaPosfija.InfijaAPosfija;
 import javax.swing.JOptionPane;
 
@@ -8,7 +9,9 @@ import javax.swing.JOptionPane;
  * @author Isaac
  */
 public class Inicio extends javax.swing.JFrame {
-
+    InfijaAPosfija expresion = new InfijaAPosfija();
+    AFN afn;
+    
     public Inicio() {
         initComponents();
     }
@@ -36,6 +39,11 @@ public class Inicio extends javax.swing.JFrame {
         });
 
         BotonGeneraAFN.setText("Generar AFN");
+        BotonGeneraAFN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonGeneraAFNActionPerformed(evt);
+            }
+        });
 
         botonGeneraAFD.setText("Generar AFD");
 
@@ -70,13 +78,13 @@ public class Inicio extends javax.swing.JFrame {
 //INICIO, INTRODUCIR REGEXP Y CREAR NOTACION POSFIJA
     
     private void botonNuevaRegExpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNuevaRegExpActionPerformed
-        InfijaAPosfija expresion = new InfijaAPosfija();
+        
         String expresionEntrada = null;
         expresionEntrada = JOptionPane.showInputDialog("Por favor, introduzca la Expresion Regular");
         if (expresionEntrada != null) {
             expresion.setNotacionInfija(expresionEntrada);
             if(expresion.inicioInfijaAPosfija()){
-                JOptionPane.showMessageDialog(this, "La espresion regular <<"+ expresion.getNotacionInfija() +">> en notacion infija es: \n" + expresion.getNotacionPosfija());
+                JOptionPane.showMessageDialog(this, "La espresion regular <<"+ expresion.getNotacionInfija() +">> en notacion posfija es: \n" + expresion.getNotacionPosfija());
             }else{
                 JOptionPane.showMessageDialog(this, "Ocurrio un error al intentar generar la notacion posfija de la expresion regular");
             }
@@ -84,6 +92,11 @@ public class Inicio extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_botonNuevaRegExpActionPerformed
+
+    private void BotonGeneraAFNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGeneraAFNActionPerformed
+        afn = new AFN(expresion.getNotacionPosfija());
+        afn.iniciarCreaAFN();
+    }//GEN-LAST:event_BotonGeneraAFNActionPerformed
 
     /**
      * @param args the command line arguments

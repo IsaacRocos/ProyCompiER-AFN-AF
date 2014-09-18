@@ -11,12 +11,18 @@ public class PruebaAFN {
         System.out.println("Prueba 1:");
         AFN pruebaAFN1 = new AFN("ab|*a-b-b-");
         pruebaAFN1.iniciarCreaAFN();
-        System.out.println("Prueba 2:");
+      /*  
+        System.out.println("\nPrueba 2:");
         AFN pruebaAFN2 = new AFN("ab*c-|ab-c+||");
-        System.out.println("Prueba 3:");
+        pruebaAFN2.iniciarCreaAFN();
+        
+        System.out.println("\nPrueba 3:");
         AFN pruebaAFN3 = new AFN("ab*-cd|+a*-|");
-        System.out.println("Prueba 4:");
+        pruebaAFN3.iniciarCreaAFN();
+        
+        System.out.println("\nPrueba 4:");
         AFN pruebaAFN4 = new AFN("aab|c-*d+-|");
+        pruebaAFN3.iniciarCreaAFN();*/
     }
     
 }
