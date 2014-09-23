@@ -3,6 +3,7 @@ package afn;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.Stack;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,6 +17,7 @@ public class AFN {
     private int ultimoEstadoInicial = 0;
     private int ultimoEstadoFinal = 0;
     private ArrayList<String> alfabeto;
+    private boolean ocurrioError;
 
     public AFN(String regExp, ArrayList<String> alfabeto) {
         this.automata = new Stack<>();
@@ -74,8 +76,22 @@ public class AFN {
                     break;
             }//switch
         }//for
+        if (ocurrioError) {
+            int n = JOptionPane.showConfirmDialog(null,
+                    "Se presentaron problemas al generar el automata.\n¿Desea continuar con la generación del archivo?",
+                    "Ups, ¡hay problemas!",
+                    JOptionPane.YES_NO_OPTION);
+            // si= 0,  no = 1
+            if (n == 0) {
+                generarArchivoAutomata();
+            } else {
+                JOptionPane.showMessageDialog(null, "Lamentamos los inconvenientes.\nPor favor, intente ingresar una nueva espresion regular valida\nPrometemos no fallar esta vez :)");
+            }
+        } else {
+            generarArchivoAutomata();
+        }
 
-    }
+    }//inicia crear automata
 
     public void creaAutomataSimple(String elementoAnalizar) {
         try {
@@ -104,6 +120,7 @@ public class AFN {
         } catch (EmptyStackException ese) {
             ese.getStackTrace();
             System.out.println("La pila est\u00E1 vac\u00CDa");
+            setBanderaError();
         }
     }
 
@@ -152,6 +169,7 @@ public class AFN {
         } catch (EmptyStackException ese) {
             ese.getStackTrace();
             System.out.println("La pila est\u00E1 vac\u00CDa");
+            setBanderaError();
         }
     }
 
@@ -163,26 +181,27 @@ public class AFN {
             int[] inicio_finNuevo = new int[2];
             String[] transicTope = automata.pop();
             //System.out.println("El pop con que se trabaja es: " + inicio_finTope[0] + ","+ inicio_finTope[1]);
-           
+
             // 1) Cambiar estado inicial de la ultima transicion en el automata, por el estado final en la pila Inicio-Fin.
-            transicTope[0]=inicio_finFondo[1]+"";
-            
+            transicTope[0] = inicio_finFondo[1] + "";
+
             // 2) Cambiar el estado final en la pila Inicio-Fin por estado final de la ultima transicion en el automata.
-            inicio_finFondo[1]=inicio_finTope[1];
-            
+            inicio_finFondo[1] = inicio_finTope[1];
+
             //3) Agregar nuevo Inicio-Fin a la pila y nuevo estado al automata
             agregarAPilaInicio_Fin(inicio_finFondo);
-            
+
             agregarAPilaAFN(transicTope);
-           
+
             //4) Actualizar variable de clase ultimoEstadoFinal
             setUltimoEstadoFinal(inicio_finFondo[1]);
             imprimirPilaAutomata();
             imprimirPilaInicioFin();
-            
+
         } catch (EmptyStackException ese) {
             ese.getStackTrace();
             System.out.println("La pila est\u00E1 vac\u00CDa");
+            setBanderaError();
         }
     }
 
@@ -222,16 +241,16 @@ public class AFN {
             automataHijo[0] = (inicio_finTope[1]) + "";
             automataHijo[1] = "@";
             automataHijo[2] = (inicio_finTope[0]) + "";
-            
-            System.out.println("Nuevo estado final: " + (ultimoEstadoFinal+1));
-            System.out.println("Nuevo estado final: " + (ultimoEstadoFinal+2));
-            
-            setUltimoEstadoInicial(ultimoEstadoFinal+1);
-            setUltimoEstadoFinal(ultimoEstadoFinal+2);
-            
-            inicio_finTope[0]=this.ultimoEstadoInicial;
-            inicio_finTope[1]=this.ultimoEstadoFinal;
-            
+
+            System.out.println("Nuevo estado final: " + (ultimoEstadoFinal + 1));
+            System.out.println("Nuevo estado final: " + (ultimoEstadoFinal + 2));
+
+            setUltimoEstadoInicial(ultimoEstadoFinal + 1);
+            setUltimoEstadoFinal(ultimoEstadoFinal + 2);
+
+            inicio_finTope[0] = this.ultimoEstadoInicial;
+            inicio_finTope[1] = this.ultimoEstadoFinal;
+
             agregarAPilaAFN(automataHijo);
             agregarAPilaInicio_Fin(inicio_finTope);
             imprimirPilaAutomata();
@@ -239,6 +258,7 @@ public class AFN {
         } catch (EmptyStackException ese) {
             ese.getStackTrace();
             System.out.println("La pila est\u00E1 vac\u00CDa");
+            setBanderaError();
         }
     }
 
@@ -266,7 +286,7 @@ public class AFN {
         }
         System.out.println("------------------------------");
     }
-    
+
     public void imprimirPilaInicioFin() {
         System.out.println("----------INICIO-FIN------------");
         for (int i = 0; i < inicio_fin.size(); i++) {
@@ -276,33 +296,29 @@ public class AFN {
         System.out.println("------------------------------");
     }
 
+    public void setBanderaError() {
+        this.ocurrioError = true;
+    }
+
+    private void generarArchivoAutomata() {
+        for (int i = 0; i < automata.size(); i++) {
+            String[] transic = automata.get(i);
+            
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
+
 }//clase
 
-/*
 
- char []automataHijo;
- //automata.add(automataHijo);
- //System.out.println(automata.firstElement());
 
- */
-/*
-
- try{
- elementoAlfAnalizar = "" + elementoExpAnalizar;
- if (!alfabeto.contains(regExp[i + 1] + "")) { // quiere decir que el valor en elementoExpAnalizar es sólo una parte del elementoAlfAnalizar (como a en "a1" ó "an1")
- // Mientras elementoAlfAnalizar no esté en el alfabeto, sigue concatenando letras.
- elementoAlfAnalizar += regExp[++i];
- while (!alfabeto.contains(elementoAlfAnalizar)) {
- i++;
- elementoAlfAnalizar += regExp[i];
- System.out.println("Buscando en alfabeto: " + elementoAlfAnalizar);
- }
- System.out.println("Encontrado despues de concatenar:" + elementoAlfAnalizar);
- }else{
- System.out.println("Encontrado inmeditamente:" + elementoAlfAnalizar);
- }
- //creaAutomataSimple(elementoExpAnalizar);
- }catch(ArrayIndexOutOfBoundsException aiobe){
- aiobe.printStackTrace();
- }
- */
+//http://www.graphviz.org/Documentation.php
+//http://irisus90.wordpress.com/2011/06/25/uso-de-graphviz-desde-java/
+//http://www.rdebug.com/2010/05/usar-graphviz-desde-java.html
+//https://code.google.com/p/generadorpl/source/browse/trunk/src/dominio/Automata.java
