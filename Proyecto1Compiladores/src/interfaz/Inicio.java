@@ -94,8 +94,8 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_botonNuevaRegExpActionPerformed
 
     private void BotonGeneraAFNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGeneraAFNActionPerformed
-        afn = new AFN(expresion.getNotacionPosfija());
-        afn.iniciarCreaAFN();
+       // afn = new AFN(expresion.getNotacionPosfija());
+        //afn.iniciarCreaAFN();
     }//GEN-LAST:event_BotonGeneraAFNActionPerformed
 
     /**

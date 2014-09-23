@@ -99,7 +99,7 @@ public class AFN {
 
             agregarAPilaAFN(automataHijo);
             agregarAPilaInicio_Fin(estados_inicio_fin);
-
+            imprimirPilaInicioFin();
             System.out.println("Generado: (" + Integer.parseInt(automataHijo[0]) + ")--" + automataHijo[1] + "--(" + Integer.parseInt(automataHijo[2]) + ")");
         } catch (EmptyStackException ese) {
             ese.getStackTrace();
@@ -148,6 +148,7 @@ public class AFN {
             nuevoInicioFin[1] = this.ultimoEstadoFinal;
             agregarAPilaInicio_Fin(nuevoInicioFin);
             imprimirPilaAutomata();
+            imprimirPilaInicioFin();
         } catch (EmptyStackException ese) {
             ese.getStackTrace();
             System.out.println("La pila est\u00E1 vac\u00CDa");
@@ -157,9 +158,28 @@ public class AFN {
     public void creaAutomataConcatenacion() {
         try {
             System.out.println("Generando automata para concatenacion...");
-            String[] automataHijo = new String[3];
             int[] inicio_finTope = inicio_fin.pop();
             int[] inicio_finFondo = inicio_fin.pop();
+            int[] inicio_finNuevo = new int[2];
+            String[] transicTope = automata.pop();
+            //System.out.println("El pop con que se trabaja es: " + inicio_finTope[0] + ","+ inicio_finTope[1]);
+           
+            // 1) Cambiar estado inicial de la ultima transicion en el automata, por el estado final en la pila Inicio-Fin.
+            transicTope[0]=inicio_finFondo[1]+"";
+            
+            // 2) Cambiar el estado final en la pila Inicio-Fin por estado final de la ultima transicion en el automata.
+            inicio_finFondo[1]=inicio_finTope[1];
+            
+            //3) Agregar nuevo Inicio-Fin a la pila y nuevo estado al automata
+            agregarAPilaInicio_Fin(inicio_finFondo);
+            
+            agregarAPilaAFN(transicTope);
+           
+            //4) Actualizar variable de clase ultimoEstadoFinal
+            setUltimoEstadoFinal(inicio_finFondo[1]);
+            imprimirPilaAutomata();
+            imprimirPilaInicioFin();
+            
         } catch (EmptyStackException ese) {
             ese.getStackTrace();
             System.out.println("La pila est\u00E1 vac\u00CDa");
@@ -176,6 +196,7 @@ public class AFN {
             }
 
             int[] inicio_finTope = inicio_fin.pop();
+            //System.out.println("-Tomado de pila inicio_fin: " + inicio_finTope[0] + "," +inicio_finTope[1]);
 //-----  FIN+1  -->  INICIO
             String[] automataHijo = new String[3];
             automataHijo[0] = (inicio_finTope[1] + 1) + "";
@@ -201,8 +222,20 @@ public class AFN {
             automataHijo[0] = (inicio_finTope[1]) + "";
             automataHijo[1] = "@";
             automataHijo[2] = (inicio_finTope[0]) + "";
+            
+            System.out.println("Nuevo estado final: " + (ultimoEstadoFinal+1));
+            System.out.println("Nuevo estado final: " + (ultimoEstadoFinal+2));
+            
+            setUltimoEstadoInicial(ultimoEstadoFinal+1);
+            setUltimoEstadoFinal(ultimoEstadoFinal+2);
+            
+            inicio_finTope[0]=this.ultimoEstadoInicial;
+            inicio_finTope[1]=this.ultimoEstadoFinal;
+            
             agregarAPilaAFN(automataHijo);
+            agregarAPilaInicio_Fin(inicio_finTope);
             imprimirPilaAutomata();
+            imprimirPilaInicioFin();
         } catch (EmptyStackException ese) {
             ese.getStackTrace();
             System.out.println("La pila est\u00E1 vac\u00CDa");
@@ -229,7 +262,16 @@ public class AFN {
         System.out.println("----------AUTOMATA------------");
         for (int i = 0; i < automata.size(); i++) {
             String[] transic = automata.get(i);
-            System.out.println("(" + Integer.parseInt(transic[0]) + ")--" + transic[1] + "--(" + Integer.parseInt(transic[2]) + ")");
+            System.out.println("(" + Integer.parseInt(transic[0]) + ")-- " + transic[1] + " --(" + Integer.parseInt(transic[2]) + ")");
+        }
+        System.out.println("------------------------------");
+    }
+    
+    public void imprimirPilaInicioFin() {
+        System.out.println("----------INICIO-FIN------------");
+        for (int i = 0; i < inicio_fin.size(); i++) {
+            int[] transic = inicio_fin.get(i);
+            System.out.println(transic[0] + "," + transic[1]);
         }
         System.out.println("------------------------------");
     }
@@ -263,6 +305,4 @@ public class AFN {
  }catch(ArrayIndexOutOfBoundsException aiobe){
  aiobe.printStackTrace();
  }
-
-
  */
