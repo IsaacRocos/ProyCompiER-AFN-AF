@@ -14,7 +14,7 @@ public class PruebaAFN {
         alfabeto1.add("a");
         alfabeto1.add("b");
         alfabeto1.add("c");
-       // alfabeto1.add("");
+        alfabeto1.add("@");
        // alfabeto1.add("");
         
         System.out.println("<-> PRUEBA 1 <->");
