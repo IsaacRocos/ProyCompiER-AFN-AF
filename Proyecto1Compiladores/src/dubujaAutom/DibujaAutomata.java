@@ -1,6 +1,7 @@
 package dubujaAutom;
 
 import afn.AFN;
+import interfaz.Imagen;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -17,6 +18,9 @@ import javax.swing.JOptionPane;
 
 /**
  * @author Isaac
+ */
+/*
+ C:\Users\Isaac\Desktop\GraphViz\bin>dot -Tjpg generadosyF\dot5.dot > AutomatasGenerados\generado10.jpg
  */
 
 /*FORMATO DE ARCHIVO .DOT PARA AF
@@ -38,6 +42,8 @@ import javax.swing.JOptionPane;
 public class DibujaAutomata {
 
     private ArrayList automata;
+    String nombreAutomata;
+    Imagen dibujaImagen;
 
     public DibujaAutomata() {
         this.automata = new ArrayList();
@@ -48,6 +54,11 @@ public class DibujaAutomata {
         cargarArchivoTXT();
         obtenerEstadosFinales();
         obtenerEstadoInicial();
+        generarDOT_DesdeArchivo();
+        ejecutarDOT();
+        //dibujaImagen = new Imagen();
+       // dibujaImagen.agregarImagen();
+        
     }
 
     public void cargarArchivoTXT() {
@@ -87,26 +98,54 @@ public class DibujaAutomata {
     public void generarDOT_DesdeArchivo() {
         FileWriter archivoAutomata = null;
         PrintWriter pw = null;
-        String nombreAutomata = JOptionPane.showInputDialog("Por favor, indique el nombre del archivo DOT que describe al automata");
-
-        pw.println("digraph finite_state_machine {");
-        pw.println("node [shape = point ];" + obtenerEstadoInicial());
-        pw.print("node [shape = doublecircle];");
-        ArrayList estadosFinales = obtenerEstadosFinales();
-        for (int i = 0; i < estadosFinales.size(); i++) {
-            pw.print((String) estadosFinales.get(i) + ";");
-        }
-        pw.println();
-        pw.println("node [shape = circle];");
-        
+        nombreAutomata = JOptionPane.showInputDialog("Por favor, indique el nombre del archivo DOT que describe al automata");
+        this.nombreAutomata += ".dot";
         try {
-            archivoAutomata = new FileWriter(nombreAutomata + ".txt");
+            //archivoAutomata = new FileWriter("C:\\GraphViz\\bin\\generadosyF\\" + nombreAutomata);
+            archivoAutomata = new FileWriter("ArchivosDOT\\" + nombreAutomata);
+            
             pw = new PrintWriter(archivoAutomata);
-            for (int i = 0; i < automata.size(); i++) {
-                String[] transicionesEstado = automata.get(i).toString().split(":");
-                
+
+            String estadoInicial = obtenerEstadoInicial();
+            pw.println("digraph finite_state_machine {");
+            pw.println("rankdir=LR;");
+            pw.println("node [shape = point ]; qi;");
+            pw.print("node [shape = doublecircle];");
+
+            System.out.println("digraph finite_state_machine {");
+            System.out.println("rankdir=LR;");
+            System.out.println("node [shape = point ]; qi;");
+            System.out.println("node [shape = doublecircle];");
+
+            ArrayList estadosFinales = obtenerEstadosFinales();
+            for (int i = 0; i < estadosFinales.size(); i++) {
+                pw.print((String) estadosFinales.get(i) + ";");
+                System.out.println((String) estadosFinales.get(i) + ";");
+            }
+            pw.println();
+            pw.println("node [shape = circle];");
+            pw.println("qi -> " + estadoInicial + ";");
+
+            System.out.println("node [shape = circle];");
+            System.out.println("qi   ->" + estadoInicial + ";");
+
+            for (int l = 0; l < automata.size(); l++) { //ciclo principal, recorre automata
+                String[] transicionesEstado = automata.get(l).toString().split(":"); // toma la linea completa:   0:a;1:b;-:c;-:@;-  y la parte por :
+                for (int j = 1; j < transicionesEstado.length; j++) {  // resulta un arreglo del siguiente modo: transicionesEstado = {"0" ,  "a;1"  ,  "b;-"  ,  "c;-" ,  "@;-"}
+                    String fragmentoTransic = transicionesEstado[j]; // toma un elemento del arreglo que se geeró despues de split
+                    if (!fragmentoTransic.contains("-")) {
+                        // se quita ; y ahora cada elemento es del tipo:   a,1,5,6,9 ...  (se sabe que el primer elemento es el simbolo de transición y los siguientes son estados)
+                        String[] simboloyEstados = fragmentoTransic.replace(";", ",").split(",");
+                        for (int k = 1; k < simboloyEstados.length; k++) {
+                            //q2 -> q3 [ label = "0" ]; 
+                            pw.println(transicionesEstado[0].replace("*", "") + " -> " + simboloyEstados[k] + "[ label = \"" + simboloyEstados[0] + "\" ];");
+                            System.out.println(transicionesEstado[0].replace("*", "") + " -> " + simboloyEstados[k] + "[ label = \"" + simboloyEstados[0] + "\" ];");
+                        }
+                    }
+                }
             }
             pw.println("}");
+            System.out.println("}");
 
         } catch (IOException ex) {
             Logger.getLogger(AFN.class.getName()).log(Level.SEVERE, null, ex);
@@ -114,7 +153,7 @@ public class DibujaAutomata {
             try {
                 if (null != archivoAutomata) {
                     archivoAutomata.close();
-                    JOptionPane.showMessageDialog(null, "El archivo " + nombreAutomata + ".dot se gener\u00f3 satisfactoriamente");
+                    JOptionPane.showMessageDialog(null, "El archivo " + nombreAutomata + " se gener\u00f3 satisfactoriamente");
                 }
             } catch (Exception e2) {
                 e2.printStackTrace();
@@ -132,7 +171,7 @@ public class DibujaAutomata {
             if (transicEstado.contains("**")) {
                 String[] partirTransicEstado = transicEstado.split(":");
                 String efinal = partirTransicEstado[0].replace("*", "");
-                System.out.println("Encontrado estado final: " + efinal);
+                //System.out.println("Encontrado estado final: " + efinal);
                 estadosFinales.add(efinal);
             }
         }
@@ -147,14 +186,32 @@ public class DibujaAutomata {
             if (transicEstado.contains("*") && !transicEstado.contains("**")) {
                 String[] partirTransicEstado = transicEstado.split(":");
                 eInicial = partirTransicEstado[0].replace("*", "");
-                System.out.println("Encontrado estado inicial: " + eInicial);
+                //System.out.println("Encontrado estado inicial: " + eInicial);
                 break;
             }
         }
         return eInicial;
     }
 
+    public void ejecutarDOT() {
+        String nombreImagen = JOptionPane.showInputDialog("Para generar la imagen, por favor, indique el nombre que desea asignarle");
+        try {
+            
+            System.out.println("Ejecutando: -Tjpg C:\\GraphViz\\bin\\generadosyF\\" + nombreAutomata + " > C:\\GraphViz\\bin\\AutomatasGenerados\\" + nombreImagen + ".jpg" );
+            
+           // String argumentos = "-Tjpg C:\\GraphViz\\bin\\generadosyF\\" + nombreAutomata + " > C:\\GraphViz\\bin\\AutomatasGenerados\\" + nombreImagen + ".jpg";
+            String argumentos = "-Tjpg ArchivosDOT\\" + nombreAutomata + " > AutomatasGenerados\\" + nombreImagen + ".jpg";
+            
+            Process p = Runtime.getRuntime().exec("cmd /c C:\\GraphViz\\bin\\dot.exe " + argumentos);
+            JOptionPane.showMessageDialog(null, "El archivo " + nombreImagen + " se gener\u00f3 satisfactoriamente");
+            
+        } catch (IOException ex) {
+            Logger.getLogger(DibujaAutomata.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Ocurrieron problemas al intentar generar " + nombreImagen + " NO se gener\u00f3 correctamente.");
+        }
+    }
 }
+
 
 //http://www.graphviz.org/Documentation.php
 //http://irisus90.wordpress.com/2011/06/25/uso-de-graphviz-desde-java/

@@ -21,11 +21,11 @@ public class PruebaAFN {
         AFN pruebaAFN1 = new AFN("ab|*a-b-b-",alfabeto1);
         pruebaAFN1.iniciarCreaAFN();
       
-         /*
+        
         System.out.println("<-> PRUEBA 2 <->");
         AFN pruebaAFN2 = new AFN("ab*c-|ab-c+||",alfabeto1);
         pruebaAFN2.iniciarCreaAFN();
-        
+         /*
         System.out.println("<-> PRUEBA 3 <->");
         AFN pruebaAFN3 = new AFN("ab*-cd|+a*-|",alfabeto1);
         pruebaAFN3.iniciarCreaAFN();

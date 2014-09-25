@@ -402,7 +402,7 @@ public class AFN {
         String nombreAutomata = JOptionPane.showInputDialog("Por favor, indique el nombre del archivo que almacena al automata");
             
         try {
-            archivoAutomata = new FileWriter(nombreAutomata + ".txt");
+            archivoAutomata = new FileWriter("AFN_TXT\\"+nombreAutomata + ".txt");
             pw = new PrintWriter(archivoAutomata);
             for (int i = 0; i < automataFormateado.size(); i++) {
                 pw.println(automataFormateado.get(i));
