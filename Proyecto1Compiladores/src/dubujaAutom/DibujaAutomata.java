@@ -44,6 +44,7 @@ public class DibujaAutomata {
     private ArrayList automata;
     String nombreAutomata;
     Imagen dibujaImagen;
+    String nombreImagen;
 
     public DibujaAutomata() {
         this.automata = new ArrayList();
@@ -56,9 +57,9 @@ public class DibujaAutomata {
         obtenerEstadoInicial();
         generarDOT_DesdeArchivo();
         ejecutarDOT();
-        //dibujaImagen = new Imagen();
-       // dibujaImagen.agregarImagen();
-        
+        dibujaImagen = new Imagen();
+        dibujaImagen.agregarImagen("AutomatasGenerados\\"+nombreImagen);
+        dibujaImagen.setVisible(true);
     }
 
     public void cargarArchivoTXT() {
@@ -68,6 +69,7 @@ public class DibujaAutomata {
         JFileChooser selector = null;
 
         try {
+            JOptionPane.showMessageDialog(null, "Por favor, seleccione el archivo TXT que contiene la descripci\u00f3n del automata");
             selector = new JFileChooser();
             int resultado = selector.showOpenDialog(null);
             if (resultado == JFileChooser.APPROVE_OPTION) {
@@ -194,13 +196,14 @@ public class DibujaAutomata {
     }
 
     public void ejecutarDOT() {
-        String nombreImagen = JOptionPane.showInputDialog("Para generar la imagen, por favor, indique el nombre que desea asignarle");
+        nombreImagen = JOptionPane.showInputDialog("Para generar la imagen, por favor, indique el nombre que desea asignarle");
+        nombreImagen += ".jpg";
         try {
             
-            System.out.println("Ejecutando: -Tjpg C:\\GraphViz\\bin\\generadosyF\\" + nombreAutomata + " > C:\\GraphViz\\bin\\AutomatasGenerados\\" + nombreImagen + ".jpg" );
+            System.out.println("Ejecutando: -Tjpg C:\\GraphViz\\bin\\generadosyF\\" + nombreAutomata + " > C:\\GraphViz\\bin\\AutomatasGenerados\\" + nombreImagen);
             
            // String argumentos = "-Tjpg C:\\GraphViz\\bin\\generadosyF\\" + nombreAutomata + " > C:\\GraphViz\\bin\\AutomatasGenerados\\" + nombreImagen + ".jpg";
-            String argumentos = "-Tjpg ArchivosDOT\\" + nombreAutomata + " > AutomatasGenerados\\" + nombreImagen + ".jpg";
+            String argumentos = "-Tjpg ArchivosDOT\\" + nombreAutomata + " > AutomatasGenerados\\" + nombreImagen;
             
             Process p = Runtime.getRuntime().exec("cmd /c C:\\GraphViz\\bin\\dot.exe " + argumentos);
             JOptionPane.showMessageDialog(null, "El archivo " + nombreImagen + " se gener\u00f3 satisfactoriamente");
@@ -212,7 +215,7 @@ public class DibujaAutomata {
     }
 }
 
-
+//Fuentes graphviz
 //http://www.graphviz.org/Documentation.php
 //http://irisus90.wordpress.com/2011/06/25/uso-de-graphviz-desde-java/
 //http://www.rdebug.com/2010/05/usar-graphviz-desde-java.html

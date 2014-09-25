@@ -34,17 +34,18 @@ public class Imagen extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Automata Generado");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 904, Short.MAX_VALUE)
+            .addGap(0, 1004, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 413, Short.MAX_VALUE)
+            .addGap(0, 511, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -107,11 +108,14 @@ public class Imagen extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void agregarImagen(String url) {
+        jPanel1.removeAll();
         ImageIcon icon=new ImageIcon(url);
         icon.getImage().getScaledInstance(jPanel1.getWidth(), jPanel1.getHeight(), java.awt.Image.SCALE_SMOOTH);
         JLabel label=new JLabel();
         label.setIcon(icon);
         label.setBounds(0,0,icon.getIconWidth(),icon.getIconHeight());
+        jPanel1.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
+        this.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
         jPanel1.add(label);
         jPanel1.repaint();
         jPanel1.setOpaque(false);

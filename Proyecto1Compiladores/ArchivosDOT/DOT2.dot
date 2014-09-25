@@ -1,0 +1,32 @@
+digraph finite_state_machine {
+rankdir=LR;
+node [shape = point ]; qi;
+node [shape = doublecircle];21;
+node [shape = circle];
+qi -> 20;
+0 -> 1[ label = "a" ];
+1 -> 9[ label = "@" ];
+2 -> 3[ label = "b" ];
+3 -> 5[ label = "@" ];
+3 -> 2[ label = "@" ];
+4 -> 2[ label = "@" ];
+4 -> 5[ label = "@" ];
+5 -> 7[ label = "c" ];
+7 -> 9[ label = "@" ];
+8 -> 0[ label = "@" ];
+8 -> 4[ label = "@" ];
+9 -> 21[ label = "@" ];
+10 -> 11[ label = "a" ];
+11 -> 13[ label = "b" ];
+13 -> 19[ label = "@" ];
+14 -> 15[ label = "c" ];
+15 -> 17[ label = "@" ];
+15 -> 14[ label = "@" ];
+16 -> 14[ label = "@" ];
+17 -> 19[ label = "@" ];
+18 -> 10[ label = "@" ];
+18 -> 16[ label = "@" ];
+19 -> 21[ label = "@" ];
+20 -> 8[ label = "@" ];
+20 -> 18[ label = "@" ];
+}
