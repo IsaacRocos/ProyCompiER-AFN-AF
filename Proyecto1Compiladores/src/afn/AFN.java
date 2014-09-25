@@ -1,10 +1,16 @@
 package afn;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,12 +28,14 @@ public class AFN {
     private ArrayList<String> alfabeto;
     private boolean ocurrioError;
     public ArrayList<String> conjuntoDeEstados;
+    public ArrayList<String> automataFormateado;  //Almacena la información del automata.
 
     public AFN(String regExp, ArrayList<String> alfabeto) {
         this.automata = new Stack<>();
         this.inicio_fin = new Stack<>();
         this.alfabeto = new ArrayList<>();
         this.conjuntoDeEstados = new ArrayList<>();
+        this.automataFormateado = new ArrayList<>();
 
         System.out.println("Se va a convertir: << " + regExp + " >> en un AFN");
         setRegExp(regExp);
@@ -96,6 +104,7 @@ public class AFN {
                 JOptionPane.showMessageDialog(null, "Lamentamos los inconvenientes.\nPor favor, intente ingresar una nueva espresion regular valida\nPrometemos no fallar esta vez :)");
             }
         } else {
+            generarFormatoAutomata();
             generarArchivoAutomata();
         }
 
@@ -305,12 +314,12 @@ public class AFN {
     }
 
     public void imprimirPilaAutomata() {
-        System.out.println("----------AUTOMATA------------");
+        System.out.println("-----------AUTOMATA-------------");
         for (int i = 0; i < automata.size(); i++) {
             String[] transic = automata.get(i);
             System.out.println("(" + Integer.parseInt(transic[0]) + ")-- " + transic[1] + " --(" + Integer.parseInt(transic[2]) + ")");
         }
-        System.out.println("------------------------------");
+        System.out.println("--------------------------------");
     }
 
     public void imprimirPilaInicioFin() {
@@ -335,52 +344,85 @@ public class AFN {
         this.ocurrioError = true;
     }
 
-    private void generarArchivoAutomata() {
-        /*
-         6*:a;,-:b;,-:@;,4,7
-         4:a;,-:b;,-:@;,0,2
-         */
-        Stack automataAux = automata;
-
+    private void generarFormatoAutomata() {
+        System.out.println("---FORMATO FINAL DE AUTOMATA---");
         Iterator iteraEstados = conjuntoDeEstados.iterator();
         int indice = 0;
-
-
         while (iteraEstados.hasNext()) {
             String lineaDescripcionEstado = "";
-            String estado = (String) iteraEstados.next();
-            if (estado.equals(inicio_fin.peek()[0] + "")) {
-                lineaDescripcionEstado = estado + "*:";
-            } else if (estado.equals(inicio_fin.peek()[1] + "")) {
-                lineaDescripcionEstado = estado + "**:";
+            String estado = (String) iteraEstados.next(); //estado actual
+            if (estado.equals(inicio_fin.peek()[0] + "")) {  // es estado inicial?
+                lineaDescripcionEstado = estado + "*";
+            } else if (estado.equals(inicio_fin.peek()[1] + "")) { // es estado final?
+                lineaDescripcionEstado = estado + "**";
             } else {
-                lineaDescripcionEstado = estado + ":";
+                lineaDescripcionEstado = estado;  // entonces es estado normal
+            }
+            // Buscar las transiciones del estado actual.
+            // Toma cada elemento del alfabeto y lo busca en las transiciones de "estado".
+            for (int i = 0; i < alfabeto.size(); i++) {
+                String letraAlfab = alfabeto.get(i); // Toma la i-esima letra.
+                //Ahora a buscar en el automata las transiciones para "estado" con "letraAlfab"
+                Iterator iteraAutomata = automata.iterator();
+                int encontrado = 0;
+                while (iteraAutomata.hasNext()) {
+
+                    String[] transicion = (String[]) iteraAutomata.next();  // Almacenará la info de una transicion del automata.
+                    if (estado.equals(transicion[0]) && letraAlfab.equals(transicion[1])) { // Si encuentra el estado al inicio de la transicion actual
+
+                        if (i != (alfabeto.size() - 1)) { // si no se analiza el último elemento del alfabeto
+                            if (encontrado == 0) { // si es el primer elemento que coincide
+                                lineaDescripcionEstado += ":" + transicion[1] + ";" + transicion[2];
+                            } else { // si ya se habían encontrado otras transiciones
+                                lineaDescripcionEstado += "," + transicion[2];
+                            }
+                        } else { // si es el último elemento
+                            if (encontrado == 0) { // si el último elemento es el único que coincide con una transicion
+                                lineaDescripcionEstado += ":" + transicion[1] + ";" + transicion[2];
+                            } else {
+                                lineaDescripcionEstado += "," + transicion[2];
+                            }
+                        }
+                        encontrado = 1;
+                    }
+                }//while
+                if (encontrado == 0) {
+                    lineaDescripcionEstado += ":" + letraAlfab + ";-";
+                }
+            }// for
+            System.out.println(lineaDescripcionEstado);
+            automataFormateado.add(lineaDescripcionEstado);
+        }// while
+        System.out.println("------------------------------");
+    }//gen arch
+
+    private void generarArchivoAutomata() {
+        FileWriter archivoAutomata = null;
+        PrintWriter pw = null;
+        String nombreAutomata = JOptionPane.showInputDialog("Por favor, indique el nombre del archivo que almacena al automata");
+            
+        try {
+            archivoAutomata = new FileWriter(nombreAutomata + ".txt");
+            pw = new PrintWriter(archivoAutomata);
+            for (int i = 0; i < automataFormateado.size(); i++) {
+                pw.println(automataFormateado.get(i));
             }
 
-            for (int i = 0; i < alfabeto.size(); i++) {
-                // Toma cada elemento del alfabeto y lo busca en las transiciones de "estado"
-
-                String letraAlf = alfabeto.get(i); // Toma la i-esima letra.
-                Iterator iteraAutomataAux = automataAux.iterator();
-                String[] transicion; // Almacenará la info de una transicion.
-                while (iteraAutomataAux.hasNext()) {
-                    int encontrado = 0;
-                    transicion = (String[]) iteraAutomataAux.next();
-                    if (estado.equals(transicion[0])) { // Si encuentra el estado al inicio de la transicion actual
-                        if (i != (alfabeto.size() - 1)) {
-                            lineaDescripcionEstado += transicion[1] + ","; // 
-                        }else{
-                            
-                        }
-                    }
+        } catch (IOException ex) {
+            Logger.getLogger(AFN.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (null != archivoAutomata) {
+                    archivoAutomata.close();
+                    JOptionPane.showMessageDialog(null, "El archivo " + nombreAutomata + " se gener\u00f3 satisfactoriamente");
                 }
-                transicion = (String[]) iteraEstados.next();
-                String eInicial = transicion[0];
-                indice++;
+            } catch (Exception e2) {
+                e2.printStackTrace();
             }
         }
-    }//gen arch
+    }
 }//clase
+
 //http://www.graphviz.org/Documentation.php
 //http://irisus90.wordpress.com/2011/06/25/uso-de-graphviz-desde-java/
 //http://www.rdebug.com/2010/05/usar-graphviz-desde-java.html
@@ -431,7 +473,5 @@ public class AFN {
  }//if
  indice ++;
  }//wle
-
-
 
  */
