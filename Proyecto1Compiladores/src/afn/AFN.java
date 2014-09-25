@@ -423,10 +423,7 @@ public class AFN {
     }
 }//clase
 
-//http://www.graphviz.org/Documentation.php
-//http://irisus90.wordpress.com/2011/06/25/uso-de-graphviz-desde-java/
-//http://www.rdebug.com/2010/05/usar-graphviz-desde-java.html
-//https://code.google.com/p/generadorpl/source/browse/trunk/src/dominio/Automata.java
+
 /*
  para iterar alfabeto
  for(int i=0; i<alfabeto.size();i++){

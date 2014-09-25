@@ -29,6 +29,7 @@
                   <Component id="botonNuevaRegExp" pref="187" max="32767" attributes="0"/>
                   <Component id="BotonGeneraAFN" max="32767" attributes="0"/>
                   <Component id="botonGeneraAFD" max="32767" attributes="0"/>
+                  <Component id="dibujaAutomata" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="24" max="32767" attributes="0"/>
           </Group>
@@ -43,7 +44,9 @@
               <Component id="BotonGeneraAFN" min="-2" pref="35" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
               <Component id="botonGeneraAFD" min="-2" pref="35" max="-2" attributes="0"/>
-              <EmptySpace pref="34" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="dibujaAutomata" min="-2" pref="36" max="-2" attributes="0"/>
+              <EmptySpace pref="23" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -69,6 +72,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Generar AFD"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="dibujaAutomata">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Dibujar un Aut&#xf3;mata"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dibujaAutomataActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

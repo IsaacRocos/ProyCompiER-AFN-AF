@@ -1,7 +1,12 @@
 package interfaz;
 
 import afn.AFN;
+import dubujaAutom.DibujaAutomata;
 import infijaPosfija.InfijaAPosfija;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
@@ -9,9 +14,10 @@ import javax.swing.JOptionPane;
  * @author Isaac
  */
 public class Inicio extends javax.swing.JFrame {
+
     InfijaAPosfija expresion = new InfijaAPosfija();
     AFN afn;
-    
+
     public Inicio() {
         initComponents();
     }
@@ -28,6 +34,7 @@ public class Inicio extends javax.swing.JFrame {
         botonNuevaRegExp = new javax.swing.JToggleButton();
         BotonGeneraAFN = new javax.swing.JToggleButton();
         botonGeneraAFD = new javax.swing.JButton();
+        dibujaAutomata = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,6 +54,13 @@ public class Inicio extends javax.swing.JFrame {
 
         botonGeneraAFD.setText("Generar AFD");
 
+        dibujaAutomata.setText("Dibujar un Autómata");
+        dibujaAutomata.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dibujaAutomataActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -56,7 +70,8 @@ public class Inicio extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(botonNuevaRegExp, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                     .addComponent(BotonGeneraAFN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(botonGeneraAFD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(botonGeneraAFD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dibujaAutomata, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -68,40 +83,47 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(BotonGeneraAFN, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(13, 13, 13)
                 .addComponent(botonGeneraAFD, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(dibujaAutomata, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
 //INICIO, INTRODUCIR REGEXP Y CREAR NOTACION POSFIJA
-    
+
     private void botonNuevaRegExpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNuevaRegExpActionPerformed
-        
+
         String expresionEntrada = null;
         expresionEntrada = JOptionPane.showInputDialog("Por favor, introduzca la Expresion Regular");
         if (expresionEntrada != null) {
             expresion.setNotacionInfija(expresionEntrada);
-            if(expresion.inicioInfijaAPosfija()){
-                JOptionPane.showMessageDialog(this, "La espresion regular <<"+ expresion.getNotacionInfija() +">> en notacion posfija es: \n" + expresion.getNotacionPosfija());
-            }else{
+            if (expresion.inicioInfijaAPosfija()) {
+                JOptionPane.showMessageDialog(this, "La espresion regular <<" + expresion.getNotacionInfija() + ">> en notacion posfija es: \n" + expresion.getNotacionPosfija());
+            } else {
                 JOptionPane.showMessageDialog(this, "Ocurrio un error al intentar generar la notacion posfija de la expresion regular");
             }
-            
+
         }
 
     }//GEN-LAST:event_botonNuevaRegExpActionPerformed
 
     private void BotonGeneraAFNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGeneraAFNActionPerformed
-       // afn = new AFN(expresion.getNotacionPosfija());
+        // afn = new AFN(expresion.getNotacionPosfija());
         //afn.iniciarCreaAFN();
     }//GEN-LAST:event_BotonGeneraAFNActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
+    private void dibujaAutomataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dibujaAutomataActionPerformed
+        /***************************************/
+        DibujaAutomata dibujo = new DibujaAutomata();
+        
+    }//GEN-LAST:event_dibujaAutomataActionPerformed
+
+/**
+ * @param args the command line arguments
+ */
+public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -112,16 +134,48 @@ public class Inicio extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                }
+                
+
+
+
+
+
+}
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Inicio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Inicio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Inicio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Inicio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Inicio.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } 
+
+
+
+
+
+catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Inicio.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } 
+
+
+
+
+
+catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Inicio.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } 
+
+
+
+
+
+catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Inicio.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -137,5 +191,6 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JToggleButton BotonGeneraAFN;
     private javax.swing.JButton botonGeneraAFD;
     private javax.swing.JToggleButton botonNuevaRegExp;
+    private javax.swing.JButton dibujaAutomata;
     // End of variables declaration//GEN-END:variables
 }
