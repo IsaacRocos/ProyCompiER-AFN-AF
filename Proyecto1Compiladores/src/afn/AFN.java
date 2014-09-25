@@ -337,100 +337,101 @@ public class AFN {
 
     private void generarArchivoAutomata() {
         /*
-        6*:a;,-:b;,-:@;,4,7
-        4:a;,-:b;,-:@;,0,2
-        */
-        
+         6*:a;,-:b;,-:@;,4,7
+         4:a;,-:b;,-:@;,0,2
+         */
         Stack automataAux = automata;
+
         Iterator iteraEstados = conjuntoDeEstados.iterator();
         int indice = 0;
+
+
         while (iteraEstados.hasNext()) {
             String lineaDescripcionEstado = "";
-            ArrayList<String> alfabetoAux = this.alfabeto;
             String estado = (String) iteraEstados.next();
             if (estado.equals(inicio_fin.peek()[0] + "")) {
                 lineaDescripcionEstado = estado + "*:";
-            }else if(estado.equals(inicio_fin.peek()[1]+"")){
+            } else if (estado.equals(inicio_fin.peek()[1] + "")) {
                 lineaDescripcionEstado = estado + "**:";
-            }else{
+            } else {
                 lineaDescripcionEstado = estado + ":";
             }
-        String[] transicion;
-        //POSIBLE FOR para elementos del alfabeto
-        
-        Iterator iteraAutomataAux = automataAux.iterator();
-        while (iteraAutomataAux.hasNext()) {
-            transicion = (String[]) iteraAutomataAux.next();
-            if (estado.equals(transicion[0])) {
-                lineaDescripcionEstado += transicion[1] + ",";
+
+            for (int i = 0; i < alfabeto.size(); i++) {
+                // Toma cada elemento del alfabeto y lo busca en las transiciones de "estado"
+
+                String letraAlf = alfabeto.get(i); // Toma la i-esima letra.
+                Iterator iteraAutomataAux = automataAux.iterator();
+                String[] transicion; // Almacenará la info de una transicion.
+                while (iteraAutomataAux.hasNext()) {
+                    int encontrado = 0;
+                    transicion = (String[]) iteraAutomataAux.next();
+                    if (estado.equals(transicion[0])) { // Si encuentra el estado al inicio de la transicion actual
+                        if (i != (alfabeto.size() - 1)) {
+                            lineaDescripcionEstado += transicion[1] + ","; // 
+                        }else{
+                            
+                        }
+                    }
+                }
+                transicion = (String[]) iteraEstados.next();
+                String eInicial = transicion[0];
+                indice++;
             }
         }
-        transicion = (String[]) iteraEstados.next();
-        String eInicial = transicion[0];
-
-        indice++;
-    }
-}//gen arch
-
+    }//gen arch
 }//clase
-
 //http://www.graphviz.org/Documentation.php
 //http://irisus90.wordpress.com/2011/06/25/uso-de-graphviz-desde-java/
 //http://www.rdebug.com/2010/05/usar-graphviz-desde-java.html
 //https://code.google.com/p/generadorpl/source/browse/trunk/src/dominio/Automata.java
-
-
 /*
-para iterar alfabeto
-for(int i=0; i<alfabeto.size();i++){
-                    String simboloAlf = alfabeto.get(i);
+ para iterar alfabeto
+ for(int i=0; i<alfabeto.size();i++){
+ String simboloAlf = alfabeto.get(i);
                     
-                }
-*/
-
-
-
-
+ }
+ */
 /*
 
 
-Iterator iteraEstados = conjuntoDeEstados.iterator();
-        int indice = 0;
+ Iterator iteraEstados = conjuntoDeEstados.iterator();
+ int indice = 0;
         
-        while (iteraEstados.hasNext()) {
-            String lineaDescripcionEstado = "";
-            ArrayList<String> simbolosEncontrados = new ArrayList<>();
-            String[] transicion;
-            transicion = (String[]) iteraEstados.next();
-            String eInicial = transicion[0];
+ while (iteraEstados.hasNext()) {
+ String lineaDescripcionEstado = "";
+ ArrayList<String> simbolosEncontrados = new ArrayList<>();
+ String[] transicion;
+ transicion = (String[]) iteraEstados.next();
+ String eInicial = transicion[0];
             
-            if (!listaEstadosProcesados.contains(eInicial)) {
-                if(eInicial.equals(inicio_fin.peek()[0]+"")){
-                    lineaDescripcionEstado = eInicial + "*:";
-                }
-    //            }else if(){
+ if (!listaEstadosProcesados.contains(eInicial)) {
+ if(eInicial.equals(inicio_fin.peek()[0]+"")){
+ lineaDescripcionEstado = eInicial + "*:";
+ }
+ //            }else if(){
                 
-     //           }
+ //           }
                 
                 
                 
-                String simboloTrans = transicion[1];
-                String eFinal = transicion[2];
+ String simboloTrans = transicion[1];
+ String eFinal = transicion[2];
                 
-                for(int j=1;j<automataAux.size();j++){
-                    String[] transicionBusqueda;
-                    transicionBusqueda = (String[]) automataAux.get(j);
-                    if(transicionBusqueda[0].equals(eInicial)){
-                        String simboloTransBusqueda = transicionBusqueda[1];
-                        String eFinalBusqueda = transicionBusqueda[2];
+ for(int j=1;j<automataAux.size();j++){
+ String[] transicionBusqueda;
+ transicionBusqueda = (String[]) automataAux.get(j);
+ if(transicionBusqueda[0].equals(eInicial)){
+ String simboloTransBusqueda = transicionBusqueda[1];
+ String eFinalBusqueda = transicionBusqueda[2];
                         
-                    }
-                }
+ }
+ }
 
-            }//if
-            indice ++;
-        }//wle
+ }//if
+ indice ++;
+ }//wle
 
 
 
-*/
+ */
