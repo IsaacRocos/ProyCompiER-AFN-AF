@@ -35,8 +35,10 @@ public class Inicio extends javax.swing.JFrame {
         BotonGeneraAFN = new javax.swing.JToggleButton();
         botonGeneraAFD = new javax.swing.JButton();
         dibujaAutomata = new javax.swing.JButton();
+        botonValidarCadenas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Proyecto 1");
 
         botonNuevaRegExp.setText("Nueva Expresión Regular");
         botonNuevaRegExp.addActionListener(new java.awt.event.ActionListener() {
@@ -61,6 +63,8 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
+        botonValidarCadenas.setText("Validar cadenas");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -71,7 +75,8 @@ public class Inicio extends javax.swing.JFrame {
                     .addComponent(botonNuevaRegExp, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                     .addComponent(BotonGeneraAFN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(botonGeneraAFD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(dibujaAutomata, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(dibujaAutomata, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botonValidarCadenas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -85,7 +90,9 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(botonGeneraAFD, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(dibujaAutomata, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(botonValidarCadenas, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
@@ -110,13 +117,13 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_botonNuevaRegExpActionPerformed
 
     private void BotonGeneraAFNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGeneraAFNActionPerformed
-        // afn = new AFN(expresion.getNotacionPosfija());
-        //afn.iniciarCreaAFN();
+         afn = new AFN(expresion.getNotacionPosfija(),expresion.getAlfabeto());
+         afn.iniciarCreaAFN();
     }//GEN-LAST:event_BotonGeneraAFNActionPerformed
 
     private void dibujaAutomataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dibujaAutomataActionPerformed
         /***************************************/
-        DibujaAutomata dibujo = new DibujaAutomata();
+        DibujaAutomata dibujo = new DibujaAutomata(null);
         
     }//GEN-LAST:event_dibujaAutomataActionPerformed
 
@@ -191,6 +198,7 @@ catch (javax.swing.UnsupportedLookAndFeelException ex) {
     private javax.swing.JToggleButton BotonGeneraAFN;
     private javax.swing.JButton botonGeneraAFD;
     private javax.swing.JToggleButton botonNuevaRegExp;
+    private javax.swing.JButton botonValidarCadenas;
     private javax.swing.JButton dibujaAutomata;
     // End of variables declaration//GEN-END:variables
 }

@@ -36,6 +36,12 @@ public class Imagen extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Automata Generado");
+        setBackground(new java.awt.Color(0, 0, 0));
+        setLocationByPlatform(true);
+        setMinimumSize(new java.awt.Dimension(500, 500));
+        setType(java.awt.Window.Type.POPUP);
+
+        jPanel1.setToolTipText("Automata resultante");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -115,7 +121,8 @@ public class Imagen extends javax.swing.JFrame {
         label.setIcon(icon);
         label.setBounds(0,0,icon.getIconWidth(),icon.getIconHeight());
         jPanel1.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
-        this.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
+        //this.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
+        this.setSize(icon.getIconWidth(), icon.getIconHeight());
         jPanel1.add(label);
         jPanel1.repaint();
         jPanel1.setOpaque(false);

@@ -46,36 +46,40 @@ public class DibujaAutomata {
     Imagen dibujaImagen;
     String nombreImagen;
 
-    public DibujaAutomata() {
+    public DibujaAutomata(String ruta) {
         this.automata = new ArrayList();
-        inicia();
+        inicia(ruta);
     }
 
-    private void inicia() {
-        cargarArchivoTXT();
+    private void inicia(String ruta) {
+        cargarArchivoTXT(ruta);
         obtenerEstadosFinales();
         obtenerEstadoInicial();
         generarDOT_DesdeArchivo();
         ejecutarDOT();
         dibujaImagen = new Imagen();
-        dibujaImagen.agregarImagen("AutomatasGenerados\\"+nombreImagen);
+        dibujaImagen.agregarImagen("AutomatasGenerados\\" + nombreImagen);
         dibujaImagen.setVisible(true);
     }
 
-    public void cargarArchivoTXT() {
-        File ArchivoAutomata = null;
+    public void cargarArchivoTXT(String ruta) {
+        File archivoAutomata = null;
         FileReader fr = null;
         BufferedReader br = null;
         JFileChooser selector = null;
 
         try {
-            JOptionPane.showMessageDialog(null, "Por favor, seleccione el archivo TXT que contiene la descripci\u00f3n del automata");
-            selector = new JFileChooser();
-            int resultado = selector.showOpenDialog(null);
-            if (resultado == JFileChooser.APPROVE_OPTION) {
-                ArchivoAutomata = selector.getSelectedFile();
+            if (ruta == null) {
+                JOptionPane.showMessageDialog(null, "Por favor, seleccione el archivo TXT que contiene la descripci\u00f3n del automata");
+                selector = new JFileChooser();
+                int resultado = selector.showOpenDialog(null);
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    archivoAutomata = selector.getSelectedFile();
+                }
+            } else {
+                archivoAutomata = new File(ruta);
             }
-            fr = new FileReader(ArchivoAutomata);
+            fr = new FileReader(archivoAutomata);
             br = new BufferedReader(fr);
             // Lectura del fichero
             String linea;
@@ -105,7 +109,7 @@ public class DibujaAutomata {
         try {
             //archivoAutomata = new FileWriter("C:\\GraphViz\\bin\\generadosyF\\" + nombreAutomata);
             archivoAutomata = new FileWriter("ArchivosDOT\\" + nombreAutomata);
-            
+
             pw = new PrintWriter(archivoAutomata);
 
             String estadoInicial = obtenerEstadoInicial();
@@ -199,22 +203,21 @@ public class DibujaAutomata {
         nombreImagen = JOptionPane.showInputDialog("Para generar la imagen, por favor, indique el nombre que desea asignarle");
         nombreImagen += ".jpg";
         try {
-            
+
             System.out.println("Ejecutando: -Tjpg C:\\GraphViz\\bin\\generadosyF\\" + nombreAutomata + " > C:\\GraphViz\\bin\\AutomatasGenerados\\" + nombreImagen);
-            
-           // String argumentos = "-Tjpg C:\\GraphViz\\bin\\generadosyF\\" + nombreAutomata + " > C:\\GraphViz\\bin\\AutomatasGenerados\\" + nombreImagen + ".jpg";
+
+            // String argumentos = "-Tjpg C:\\GraphViz\\bin\\generadosyF\\" + nombreAutomata + " > C:\\GraphViz\\bin\\AutomatasGenerados\\" + nombreImagen + ".jpg";
             String argumentos = "-Tjpg ArchivosDOT\\" + nombreAutomata + " > AutomatasGenerados\\" + nombreImagen;
-            
+
             Process p = Runtime.getRuntime().exec("cmd /c C:\\GraphViz\\bin\\dot.exe " + argumentos);
             JOptionPane.showMessageDialog(null, "El archivo " + nombreImagen + " se gener\u00f3 satisfactoriamente");
-            
+
         } catch (IOException ex) {
             Logger.getLogger(DibujaAutomata.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocurrieron problemas al intentar generar " + nombreImagen + " NO se gener\u00f3 correctamente.");
         }
     }
 }
-
 //Fuentes graphviz
 //http://www.graphviz.org/Documentation.php
 //http://irisus90.wordpress.com/2011/06/25/uso-de-graphviz-desde-java/

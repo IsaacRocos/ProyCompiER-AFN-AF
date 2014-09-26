@@ -1,5 +1,6 @@
 package afn;
 
+import dubujaAutom.DibujaAutomata;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class AFN {
     private boolean ocurrioError;
     public ArrayList<String> conjuntoDeEstados;
     public ArrayList<String> automataFormateado;  //Almacena la información del automata.
+    String nombreAutomata=null;
 
     public AFN(String regExp, ArrayList<String> alfabeto) {
         this.automata = new Stack<>();
@@ -40,6 +42,8 @@ public class AFN {
         System.out.println("Se va a convertir: << " + regExp + " >> en un AFN");
         setRegExp(regExp);
         setAlfabeto(alfabeto);
+        System.out.println("Alfabeto recibido:");
+        imprimirAlfabeto();
     }
 
     public void setAlfabeto(ArrayList<String> alfabeto) {
@@ -99,13 +103,24 @@ public class AFN {
                     JOptionPane.YES_NO_OPTION);
             // si= 0,  no = 1
             if (n == 0) {
-                // generarArchivoAutomata();
+                 generarArchivoAutomata();
             } else {
                 JOptionPane.showMessageDialog(null, "Lamentamos los inconvenientes.\nPor favor, intente ingresar una nueva espresion regular valida\nPrometemos no fallar esta vez :)");
             }
         } else {
             generarFormatoAutomata();
             generarArchivoAutomata();
+            int n = JOptionPane.showConfirmDialog(null,
+                    "Se puede proceder con el proceso para dibujar el automata.\n¿Desea continuar?",
+                    "¿Dibujar?",
+                    JOptionPane.YES_NO_OPTION);
+            // si= 0,  no = 1
+            if (n == 0) {
+                DibujaAutomata dibujar = new DibujaAutomata("AFN_TXT\\"+ nombreAutomata);
+            } else {  
+                JOptionPane.showMessageDialog(null, "Puede dibujar el automata cuando lo desee,\nseleccioando la opcion \"Dibujar automata\" de la ventana principal.");
+            }
+            
         }
 
     }//inicia crear automata
@@ -331,6 +346,18 @@ public class AFN {
         System.out.println("------------------------------");
     }
 
+
+    public void imprimirAlfabeto() {
+        System.out.println("----------ALFABETO------------");
+        for (int i = 0; i < alfabeto.size(); i++) {
+            String transic = alfabeto.get(i);
+            System.out.println("-"+transic+"-");
+        }
+        System.out.println("------------------------------");
+    }
+
+    
+    
     public void imprimirEstados() {
         System.out.println("----------ESTADOS------------");
         for (int i = 0; i < this.conjuntoDeEstados.size(); i++) {
@@ -399,10 +426,10 @@ public class AFN {
     private void generarArchivoAutomata() {
         FileWriter archivoAutomata = null;
         PrintWriter pw = null;
-        String nombreAutomata = JOptionPane.showInputDialog("Por favor, indique el nombre del archivo que almacena al automata");
+        nombreAutomata = JOptionPane.showInputDialog("Por favor, indique el nombre del archivo que almacena al automata")+".txt";
             
         try {
-            archivoAutomata = new FileWriter("AFN_TXT\\"+nombreAutomata + ".txt");
+            archivoAutomata = new FileWriter("AFN_TXT\\"+nombreAutomata);
             pw = new PrintWriter(archivoAutomata);
             for (int i = 0; i < automataFormateado.size(); i++) {
                 pw.println(automataFormateado.get(i));

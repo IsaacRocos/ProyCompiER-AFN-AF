@@ -4,16 +4,22 @@ package infijaPosfija;
  *
  * @author ALMA
  */
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
 
 public class InfijaAPosfija {
-    
+
     private String notacionPosfija;
     private String notacionInfija;
+    public ArrayList<String> alfabeto = new ArrayList<>();
 
     public String getNotacionInfija() {
         return notacionInfija;
+    }
+
+    public ArrayList<String> getAlfabeto() {
+        return this.alfabeto;
     }
 
     public void setNotacionInfija(String notacionInfija) {
@@ -27,19 +33,42 @@ public class InfijaAPosfija {
     public void setNotacionPosfija(String notacionPosfija) {
         this.notacionPosfija = notacionPosfija;
     }
-    
-    
-    
-    
-    public  boolean inicioInfijaAPosfija(){
+
+    public void crearAlfabeto() {
+        alfabeto.add("@");
+        String caracterAlfabeto = "";
+        int cadenaIniciada = 0;
+        for (int i = 0; i < notacionInfija.length(); i++) {
+            if (((((notacionInfija.charAt(i) == '|' || notacionInfija.charAt(i) == '-') || notacionInfija.charAt(i) == '*') || notacionInfija.charAt(i) == '+') || notacionInfija.charAt(i) == '(') || notacionInfija.charAt(i) == ')') {
+                if (cadenaIniciada == 1) {
+                    cadenaIniciada = 0;
+                    
+                    if (!alfabeto.contains(caracterAlfabeto)) {
+                        alfabeto.add(caracterAlfabeto);
+                        System.out.println("Agregado: " + caracterAlfabeto);
+                    }
+                    caracterAlfabeto="";
+                }
+            } else {
+                caracterAlfabeto += notacionInfija.charAt(i);
+                cadenaIniciada = 1;
+                if(i==notacionInfija.length() && !alfabeto.contains(caracterAlfabeto)){
+                        alfabeto.add(caracterAlfabeto);
+                        System.out.println("Agregado: " + caracterAlfabeto);
+                    }
+            }
+        }
+    }
+
+    public boolean inicioInfijaAPosfija() {
 
         //ENTRADA DE DATOS
         //System.out.println("*Escribe una expresión regular: ");
         //Scanner leer = new Scanner(System.in);
-        
+        crearAlfabeto();
         String entrada = getNotacionInfija();
-        
-    //Depurar la expresion algebraica
+
+        //Depurar la expresion algebraica
     /*Un depurador permite ir paso a paso a través de cada línea de código en un programa,con lo
          cual puedes rastrear la ejecución y descubrir los errores. También puede mostrar el contenido
          de la memoria, los valores de las variables y las direcciones, así como registrar el contenido.*/
@@ -47,7 +76,9 @@ public class InfijaAPosfija {
 
         String[] arrayInfix = expr.split(" ");//Split:divide la cadena en sub cadenas
 
-    //DECLARACIÓN DE LAS PILAS
+        System.out.println("Array infix:" + arrayInfix);
+
+        //DECLARACIÓN DE LAS PILAS
     /*STACK
          La clase Stack es una clase de las llamadas de tipo
          LIFO (Last In - First Out, o último en entrar - primero en salir). 
@@ -62,13 +93,13 @@ public class InfijaAPosfija {
         Stack< String> P = new Stack< String>(); //Pila TEMPORAL PARA OPERACIONES
         Stack< String> S = new Stack< String>(); //Pila SALIDA
 
-    //Añadir la array a la Pila de entrada (E)
+        //Añadir la array a la Pila de entrada (E)
         for (int i = arrayInfix.length - 1; i >= 0; i--) {
             E.push(arrayInfix[i]);
         }
 
         try {//algoritmo q puede geneerar errores
-    //Algoritmo Infijo a Postfijo
+            //Algoritmo Infijo a Postfijo
             while (!E.isEmpty()) {
                 switch (pref(E.peek())) {
                     case 1:
@@ -93,14 +124,14 @@ public class InfijaAPosfija {
                 }
             }
 
-    //Eliminacion de `impurezas´ en la expresiones algebraicas
+            //Eliminacion de `impurezas´ en la expresiones algebraicas
             String infix = expr.replace(" ", "");
             String postfix = S.toString().replaceAll("[\\]\\[,]", "");
 
             //MOSTRAR RESULTADOS
             System.out.println("Expresion Infija: " + infix);
             System.out.println("Expresion Postfija: " + postfix);
-            
+            postfix=postfix.replace(" ","");
             setNotacionPosfija(postfix);
             return true;
 
@@ -118,12 +149,13 @@ public class InfijaAPosfija {
         String simbols = "|-*+()";
         String str = "";
 
-    //Deja espacios entre operadores
+        //Deja espacios entre operadores
         for (int i = 0; i < s.length(); i++) {
             if (simbols.contains("" + s.charAt(i))) {
                 str += " " + s.charAt(i) + " ";
             } else {
                 str += s.charAt(i);
+                System.out.println("String concat: " + str);
             }
         }
         return str.replaceAll("\\s+", " ").trim();
@@ -150,5 +182,4 @@ public class InfijaAPosfija {
         }
         return prf;
     }
-
 }
