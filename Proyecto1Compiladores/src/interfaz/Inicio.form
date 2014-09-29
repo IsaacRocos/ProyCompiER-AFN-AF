@@ -76,6 +76,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Generar AFD"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonGeneraAFDActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="dibujaAutomata">
       <Properties>
@@ -89,6 +92,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Validar cadenas"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonValidarCadenasActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

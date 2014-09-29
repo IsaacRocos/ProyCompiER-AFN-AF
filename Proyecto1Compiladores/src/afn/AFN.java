@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- * ffffffffa
+ * 
  *
  * @author Isaac
  */
@@ -48,6 +48,10 @@ public class AFN {
 
     public void setAlfabeto(ArrayList<String> alfabeto) {
         this.alfabeto = alfabeto;
+    }
+    
+    public ArrayList getAlfabeto(){
+        return this.alfabeto;
     }
 
     public void setRegExp(String regExp) {
@@ -116,7 +120,7 @@ public class AFN {
                     JOptionPane.YES_NO_OPTION);
             // si= 0,  no = 1
             if (n == 0) {
-                DibujaAutomata dibujar = new DibujaAutomata("AFN_TXT\\"+ nombreAutomata);
+                DibujaAutomata dibujar = new DibujaAutomata(nombreAutomata);
             } else {  
                 JOptionPane.showMessageDialog(null, "Puede dibujar el automata cuando lo desee,\nseleccioando la opcion \"Dibujar automata\" de la ventana principal.");
             }
@@ -357,7 +361,6 @@ public class AFN {
     }
 
     
-    
     public void imprimirEstados() {
         System.out.println("----------ESTADOS------------");
         for (int i = 0; i < this.conjuntoDeEstados.size(); i++) {
@@ -426,10 +429,10 @@ public class AFN {
     private void generarArchivoAutomata() {
         FileWriter archivoAutomata = null;
         PrintWriter pw = null;
-        nombreAutomata = JOptionPane.showInputDialog("Por favor, indique el nombre del archivo que almacena al automata")+".txt";
+        this.nombreAutomata = "AFN_TXT\\" + JOptionPane.showInputDialog("Por favor, indique el nombre del archivo que almacena al automata")+".txt";
             
         try {
-            archivoAutomata = new FileWriter("AFN_TXT\\"+nombreAutomata);
+            archivoAutomata = new FileWriter(nombreAutomata);
             pw = new PrintWriter(archivoAutomata);
             for (int i = 0; i < automataFormateado.size(); i++) {
                 pw.println(automataFormateado.get(i));
@@ -448,54 +451,10 @@ public class AFN {
             }
         }
     }
+    
+    public String getRutaArchivoAFN(){
+        return this.nombreAutomata;
+    }
+    
 }//clase
 
-
-/*
- para iterar alfabeto
- for(int i=0; i<alfabeto.size();i++){
- String simboloAlf = alfabeto.get(i);
-                    
- }
- */
-/*
-
-
- Iterator iteraEstados = conjuntoDeEstados.iterator();
- int indice = 0;
-        
- while (iteraEstados.hasNext()) {
- String lineaDescripcionEstado = "";
- ArrayList<String> simbolosEncontrados = new ArrayList<>();
- String[] transicion;
- transicion = (String[]) iteraEstados.next();
- String eInicial = transicion[0];
-            
- if (!listaEstadosProcesados.contains(eInicial)) {
- if(eInicial.equals(inicio_fin.peek()[0]+"")){
- lineaDescripcionEstado = eInicial + "*:";
- }
- //            }else if(){
-                
- //           }
-                
-                
-                
- String simboloTrans = transicion[1];
- String eFinal = transicion[2];
-                
- for(int j=1;j<automataAux.size();j++){
- String[] transicionBusqueda;
- transicionBusqueda = (String[]) automataAux.get(j);
- if(transicionBusqueda[0].equals(eInicial)){
- String simboloTransBusqueda = transicionBusqueda[1];
- String eFinalBusqueda = transicionBusqueda[2];
-                        
- }
- }
-
- }//if
- indice ++;
- }//wle
-
- */

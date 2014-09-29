@@ -1,6 +1,8 @@
 package interfaz;
 
-import afn.AFN;
+import afd.AFD;
+import afd.AFN;
+//import afn.AFN;
 import dubujaAutom.DibujaAutomata;
 import infijaPosfija.InfijaAPosfija;
 import java.io.BufferedReader;
@@ -16,7 +18,9 @@ import javax.swing.JOptionPane;
 public class Inicio extends javax.swing.JFrame {
 
     InfijaAPosfija expresion = new InfijaAPosfija();
-    AFN afn;
+    afn.AFN afn;
+    afd.AFN afn_aux;
+    AFD afd;
 
     public Inicio() {
         initComponents();
@@ -55,6 +59,11 @@ public class Inicio extends javax.swing.JFrame {
         });
 
         botonGeneraAFD.setText("Generar AFD");
+        botonGeneraAFD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonGeneraAFDActionPerformed(evt);
+            }
+        });
 
         dibujaAutomata.setText("Dibujar un Autómata");
         dibujaAutomata.addActionListener(new java.awt.event.ActionListener() {
@@ -64,6 +73,11 @@ public class Inicio extends javax.swing.JFrame {
         });
 
         botonValidarCadenas.setText("Validar cadenas");
+        botonValidarCadenas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonValidarCadenasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -117,7 +131,7 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_botonNuevaRegExpActionPerformed
 
     private void BotonGeneraAFNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGeneraAFNActionPerformed
-         afn = new AFN(expresion.getNotacionPosfija(),expresion.getAlfabeto());
+         afn = new afn.AFN(expresion.getNotacionPosfija(),expresion.getAlfabeto());
          afn.iniciarCreaAFN();
     }//GEN-LAST:event_BotonGeneraAFNActionPerformed
 
@@ -126,6 +140,22 @@ public class Inicio extends javax.swing.JFrame {
         DibujaAutomata dibujo = new DibujaAutomata(null);
         
     }//GEN-LAST:event_dibujaAutomataActionPerformed
+
+    private void botonGeneraAFDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGeneraAFDActionPerformed
+        String ruta = afn.getRutaArchivoAFN();
+        afn_aux = new afd.AFN(ruta);
+        afn_aux.lecturaArc();
+        
+        afd = new AFD(afn_aux,afn.getAlfabeto());
+        
+        
+    }//GEN-LAST:event_botonGeneraAFDActionPerformed
+
+    private void botonValidarCadenasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonValidarCadenasActionPerformed
+        
+        // AQUI VA LA INVOCACIÓN A LA CLASE DE VALIDACIÓN DE CADENAS...
+        
+    }//GEN-LAST:event_botonValidarCadenasActionPerformed
 
 /**
  * @param args the command line arguments
